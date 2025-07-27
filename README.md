@@ -712,10 +712,6 @@ This project demonstrates:
 - **✅ Business Logic**: Real-world coffee shop domain instead of generic CRUD
 - **✅ Scalability**: DynamoDB, Lambda auto-scaling, API Gateway throttling
 
-**Live Demo**: [Add your deployed API URL here]
-
-**Video Walkthrough**: [Add your Loom video link here]
-
 ---
 
 *Built with ❤️ using AWS Serverless Framework*
