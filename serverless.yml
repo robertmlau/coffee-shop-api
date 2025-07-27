@@ -1,0 +1,101 @@
+service: coffee-shop-api
+
+frameworkVersion: '4'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ${opt:region, 'us-east-1'}
+  stage: ${opt:stage, 'dev'}
+  environment:
+    COFFEE_TABLE: ${self:service}-${self:provider.stage}-coffees
+    STAGE: ${self:provider.stage}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource: !GetAtt CoffeeTable.Arn
+
+plugins:
+  - serverless-offline
+
+functions:
+  createCoffee:
+    handler: src/handlers/createCoffee.handler
+    events:
+      - http:
+          path: coffees
+          method: post
+          cors: true
+
+  getCoffees:
+    handler: src/handlers/getCoffees.handler
+    events:
+      - http:
+          path: coffees
+          method: get
+          cors: true
+
+  getCoffee:
+    handler: src/handlers/getCoffee.handler
+    events:
+      - http:
+          path: coffees/{id}
+          method: get
+          cors: true
+
+  updateCoffee:
+    handler: src/handlers/updateCoffee.handler
+    events:
+      - http:
+          path: coffees/{id}
+          method: put
+          cors: true
+
+  deleteCoffee:
+    handler: src/handlers/deleteCoffee.handler
+    events:
+      - http:
+          path: coffees/{id}
+          method: delete
+          cors: true
+
+resources:
+  Resources:
+    CoffeeTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.COFFEE_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        Tags:
+          - Key: Environment
+            Value: ${self:provider.stage}
+          - Key: Service
+            Value: ${self:service}
+
+custom:
+  serverless-offline:
+    httpPort: 3000
+
+build:
+  esbuild:
+    bundle: true
+    minify: true
+    sourcemap: false
+    external:
+      - 'aws-sdk'
+      - 'uuid'
+
