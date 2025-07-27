@@ -1,7 +1,7 @@
 import { handler as getCoffeeHandler } from '../../src/handlers/getCoffee';
 import { handler as updateCoffeeHandler } from '../../src/handlers/updateCoffee';
 import { handler as deleteCoffeeHandler } from '../../src/handlers/deleteCoffee';
-import { setupTestData, cleanupTestData } from './setup';
+import { setupTestData, cleanupTestData } from '../setup';
 
 describe('Coffee API Integration Tests', () => {
   beforeAll(async () => {
