@@ -27,8 +27,8 @@ describe('getCoffees handler', () => {
         category: 'espresso' as const,
         size: 'small' as const,
         available: true,
-        createdAt: '2023-01-01T00:00:00.000Z',
-        updatedAt: '2023-01-01T00:00:00.000Z',
+        createdAt: '2025-08-01T00:00:00.000Z',
+        updatedAt: '2025-08-01T00:00:00.000Z',
       },
       {
         id: 'coffee-2',
@@ -38,8 +38,8 @@ describe('getCoffees handler', () => {
         category: 'latte' as const,
         size: 'medium' as const,
         available: true,
-        createdAt: '2023-01-01T00:00:00.000Z',
-        updatedAt: '2023-01-01T00:00:00.000Z',
+        createdAt: '2025-08-01T00:00:00.000Z',
+        updatedAt: '2025-08-01T00:00:00.000Z',
       },
     ];
 
