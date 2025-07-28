@@ -1,4 +1,3 @@
-import { DynamoService } from '../../src/services/dynamoService';
 import { handler as createHandler } from '../../src/handlers/createCoffee';
 import { handler as getHandler } from '../../src/handlers/getCoffee';
 import { handler as updateHandler } from '../../src/handlers/updateCoffee';
