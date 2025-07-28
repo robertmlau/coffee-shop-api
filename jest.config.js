@@ -22,8 +22,7 @@ module.exports = {
     {
       displayName: 'integration',
       testMatch: ['<rootDir>/tests/integration/**/*.test.ts'],
-      testTimeout: 30000,
-      setupFilesAfterEnv: ['<rootDir>/tests/integration/jest.setup.ts'],
+      testTimeout: 30000
     },
   ],
 };
