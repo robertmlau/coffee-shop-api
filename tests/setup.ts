@@ -1,7 +1,7 @@
-// Global test setup
+// tests/setup.ts
 import { jest } from '@jest/globals';
 
-// Mock AWS SDK
+// Mock AWS SDK for unit tests
 jest.mock('aws-sdk', () => ({
   DynamoDB: {
     DocumentClient: jest.fn(() => ({
@@ -14,17 +14,29 @@ jest.mock('aws-sdk', () => ({
   },
 }));
 
-// Mock UUID
+// Mock UUID for consistent testing
 jest.mock('uuid', () => ({
   v4: jest.fn(() => 'test-uuid-123'),
 }));
 
-// Suppress console.error during tests (optional)
+// Set test environment variables
+process.env.COFFEE_TABLE = 'test-coffee-table';
+process.env.STAGE = 'test';
+process.env.AWS_REGION = 'us-east-1';
+
+// Suppress console.error during unit tests (optional)
 const originalError = console.error;
+const originalLog = console.log;
+
 beforeAll(() => {
-  console.error = jest.fn();
+  // Only suppress errors in unit tests, not integration tests
+  if (!process.env.INTEGRATION_TEST) {
+    console.error = jest.fn();
+    console.log = jest.fn();
+  }
 });
 
 afterAll(() => {
   console.error = originalError;
+  console.log = originalLog;
 });

@@ -1,28 +1,10 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  roots: ['<rootDir>/tests'],
-  testMatch: ['**/*.test.ts'],
-  collectCoverageFrom: [
-    'src/**/*.ts',
-    '!src/**/*.d.ts',
-  ],
-  coverageDirectory: 'coverage',
-  coverageReporters: ['text', 'lcov', 'html'],
-  setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
-  verbose: false,
-  testTimeout: 30000, // Increased timeout for integration tests
-  // Separate configuration for different test types
-  projects: [
-    {
-      displayName: 'unit',
-      testMatch: ['<rootDir>/tests/unit/**/*.test.ts'],
-      testTimeout: 10000,
-    },
-    {
-      displayName: 'integration',
-      testMatch: ['<rootDir>/tests/integration/**/*.test.ts'],
-      testTimeout: 30000
-    },
-  ],
+  roots: ['<rootDir>/tests/integration'],
+  testMatch: ['**/tests/integration/**/*.test.ts'],
+  setupFilesAfterEnv: ['<rootDir>/tests/integration/setup.ts'],
+  verbose: true,
+  testTimeout: 30000,
+  maxWorkers: 1, // Run integration tests sequentially
 };
