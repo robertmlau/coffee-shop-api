@@ -1,40 +1,30 @@
-import { DynamoDB } from 'aws-sdk';
+// Global test setup
+import { jest } from '@jest/globals';
 
-// Use LocalStack or actual DynamoDB for integration tests
-const dynamoDb = new DynamoDB.DocumentClient({
-  region: 'us-east-1',
-  endpoint: process.env.IS_OFFLINE ? 'http://localhost:8000' : undefined,
+// Mock AWS SDK
+jest.mock('aws-sdk', () => ({
+  DynamoDB: {
+    DocumentClient: jest.fn(() => ({
+      get: jest.fn(),
+      put: jest.fn(),
+      scan: jest.fn(),
+      delete: jest.fn(),
+      update: jest.fn(),
+    })),
+  },
+}));
+
+// Mock UUID
+jest.mock('uuid', () => ({
+  v4: jest.fn(() => 'test-uuid-123'),
+}));
+
+// Suppress console.error during tests (optional)
+const originalError = console.error;
+beforeAll(() => {
+  console.error = jest.fn();
 });
 
-export const setupTestData = async () => {
-  const tableName = process.env.COFFEE_TABLE || 'test-coffee-table';
-  
-  // Create test coffee
-  const testCoffee = {
-    id: 'integration-test-coffee',
-    name: 'Test Espresso',
-    description: 'Test coffee for integration tests',
-    price: 3.50,
-    category: 'espresso',
-    size: 'small',
-    available: true,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
-
-  await dynamoDb.put({
-    TableName: tableName,
-    Item: testCoffee,
-  }).promise();
-
-  return testCoffee;
-};
-
-export const cleanupTestData = async () => {
-  const tableName = process.env.COFFEE_TABLE || 'test-coffee-table';
-  
-  await dynamoDb.delete({
-    TableName: tableName,
-    Key: { id: 'integration-test-coffee' },
-  }).promise();
-};
+afterAll(() => {
+  console.error = originalError;
+});

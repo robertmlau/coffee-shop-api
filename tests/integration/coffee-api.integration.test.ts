@@ -15,7 +15,7 @@ describe('Coffee API Integration Tests', () => {
   describe('GET /coffees/{id}', () => {
     it('should retrieve existing coffee', async () => {
       const event = {
-        pathParameters: { id: 'integration-test-coffee' },
+        pathParameters: { id: '550e8400-e29b-41d4-a716-446655440000' },
       } as any;
 
       const result = await getCoffeeHandler(event, {} as any, {} as any) as any;
@@ -23,7 +23,7 @@ describe('Coffee API Integration Tests', () => {
 
       expect(result.statusCode).toBe(200);
       expect(body.success).toBe(true);
-      expect(body.data.id).toBe('integration-test-coffee');
+      expect(body.data.id).toBe('550e8400-e29b-41d4-a716-446655440000');
       expect(body.data.name).toBe('Test Espresso');
     });
   });
@@ -31,7 +31,7 @@ describe('Coffee API Integration Tests', () => {
   describe('PUT /coffees/{id}', () => {
     it('should update existing coffee', async () => {
       const event = {
-        pathParameters: { id: 'integration-test-coffee' },
+        pathParameters: { id: '550e8400-e29b-41d4-a716-446655440000' },
         body: JSON.stringify({
           name: 'Updated Test Espresso',
           price: 4.00,
@@ -51,7 +51,7 @@ describe('Coffee API Integration Tests', () => {
   describe('DELETE /coffees/{id}', () => {
     it('should delete existing coffee', async () => {
       const event = {
-        pathParameters: { id: 'integration-test-coffee' },
+        pathParameters: { id: '550e8400-e29b-41d4-a716-446655440000' },
       } as any;
 
       const result = await deleteCoffeeHandler(event, {} as any, {} as any) as any;
@@ -63,7 +63,7 @@ describe('Coffee API Integration Tests', () => {
 
       // Verify coffee is actually deleted
       const getResult = await getCoffeeHandler(
-        { pathParameters: { id: 'integration-test-coffee' } } as any,
+        { pathParameters: { id: '550e8400-e29b-41d4-a716-446655440000' } } as any,
         {} as any,
         {} as any
       ) as any;

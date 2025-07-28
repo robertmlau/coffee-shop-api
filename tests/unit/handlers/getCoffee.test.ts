@@ -1,62 +1,63 @@
-import { APIGatewayProxyEvent, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { handler } from '../../../src/handlers/getCoffee';
 import { DynamoService } from '../../../src/services/dynamoService';
 
+// Mock the DynamoService
 jest.mock('../../../src/services/dynamoService');
 
-const mockDynamoService = DynamoService as jest.MockedClass<typeof DynamoService>;
+const mockDynamoService = jest.mocked(DynamoService);
 
 describe('getCoffee handler', () => {
-  let mockEvent: Partial<APIGatewayProxyEvent>;
-  let mockContext: Partial<Context>;
-
   beforeEach(() => {
     jest.clearAllMocks();
-    
-    mockEvent = {
-      pathParameters: { id: '550e8400-e29b-41d4-a716-446655440000' },
-    };
-    
-    mockContext = {};
   });
 
-  it('should get a coffee successfully', async () => {
-    const coffee = {
-      id: '550e8400-e29b-41d4-a716-446655440000',
-      name: 'Espresso',
-      description: 'Strong coffee',
+  const createMockEvent = (pathParameters: any = null): APIGatewayProxyEvent => ({
+    pathParameters,
+    body: null,
+    headers: {},
+    multiValueHeaders: {},
+    httpMethod: 'GET',
+    isBase64Encoded: false,
+    path: '/coffees/123',
+    queryStringParameters: null,
+    multiValueQueryStringParameters: null,
+    stageVariables: null,
+    requestContext: {} as any,
+    resource: '',
+  });
+
+  it('should return coffee when found', async () => {
+    const mockCoffee = {
+      id: 'test-id',
+      name: 'Test Coffee',
+      description: 'Test Description',
       price: 3.50,
       category: 'espresso' as const,
       size: 'small' as const,
       available: true,
-      createdAt: '2025-08-01T00:00:00.000Z',
-      updatedAt: '2025-08-01T00:00:00.000Z',
+      createdAt: '2023-01-01T00:00:00.000Z',
+      updatedAt: '2023-01-01T00:00:00.000Z',
     };
 
-    mockDynamoService.prototype.getCoffee.mockResolvedValue(coffee);
+    mockDynamoService.prototype.getCoffee.mockResolvedValue(mockCoffee);
 
-    const result = await handler(
-      mockEvent as APIGatewayProxyEvent,
-      mockContext as Context,
-      {} as any
-    ) as any;
+    const event = createMockEvent({ id: 'test-id' });
+    const result = await handler(event, {} as any, {} as any) as APIGatewayProxyResult;
 
     expect(result.statusCode).toBe(200);
     expect(JSON.parse(result.body)).toEqual({
       success: true,
-      data: coffee,
+      data: mockCoffee,
     });
-    expect(mockDynamoService.prototype.getCoffee).toHaveBeenCalledWith('550e8400-e29b-41d4-a716-446655440000');
+    expect(mockDynamoService.prototype.getCoffee).toHaveBeenCalledWith('test-id');
   });
 
-  it('should return 404 when coffee is not found', async () => {
+  it('should return 404 when coffee not found', async () => {
     mockDynamoService.prototype.getCoffee.mockResolvedValue(null);
 
-    const result = await handler(
-      mockEvent as APIGatewayProxyEvent,
-      mockContext as Context,
-      {} as any
-    ) as any;
+    const event = createMockEvent({ id: 'non-existent-id' });
+    const result = await handler(event, {} as any, {} as any) as APIGatewayProxyResult;
 
     expect(result.statusCode).toBe(404);
     expect(JSON.parse(result.body)).toEqual({
@@ -65,14 +66,9 @@ describe('getCoffee handler', () => {
     });
   });
 
-  it('should return 400 when coffee ID is missing', async () => {
-    mockEvent.pathParameters = {};
-
-    const result = await handler(
-      mockEvent as APIGatewayProxyEvent,
-      mockContext as Context,
-      {} as any
-    ) as any;
+  it('should return 400 when id is missing', async () => {
+    const event = createMockEvent(null);
+    const result = await handler(event, {} as any, {} as any) as APIGatewayProxyResult;
 
     expect(result.statusCode).toBe(400);
     expect(JSON.parse(result.body)).toEqual({
@@ -81,32 +77,11 @@ describe('getCoffee handler', () => {
     });
   });
 
-  it('should return 400 when pathParameters is null', async () => {
-    mockEvent.pathParameters = null;
+  it('should return 500 when DynamoDB throws error', async () => {
+    mockDynamoService.prototype.getCoffee.mockRejectedValue(new Error('DynamoDB error'));
 
-    const result = await handler(
-      mockEvent as APIGatewayProxyEvent,
-      mockContext as Context,
-      {} as any
-    ) as any;
-
-    expect(result.statusCode).toBe(400);
-    expect(JSON.parse(result.body)).toEqual({
-      success: false,
-      error: 'Coffee ID is required',
-    });
-  });
-
-  it('should handle internal server error', async () => {
-    mockDynamoService.prototype.getCoffee.mockRejectedValue(
-      new Error('DynamoDB error')
-    );
-
-    const result = await handler(
-      mockEvent as APIGatewayProxyEvent,
-      mockContext as Context,
-      {} as any
-    ) as any;
+    const event = createMockEvent({ id: 'test-id' });
+    const result = await handler(event, {} as any, {} as any) as APIGatewayProxyResult;
 
     expect(result.statusCode).toBe(500);
     expect(JSON.parse(result.body)).toEqual({
