@@ -11,7 +11,6 @@
     "test:coverage": "jest --coverage",
     "test:unit": "jest tests/unit",
     "test:integration": "jest tests/integration --runInBand --detectOpenHandles",
-    "test:integration:watch": "jest tests/integration --watch --runInBand",
     "test:verbose": "jest --verbose",
     "lint": "eslint src/**/*.ts",
     "build": "tsc",
