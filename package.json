@@ -10,7 +10,8 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:unit": "jest tests/unit",
-    "test:integration": "jest tests/integration",
+    "test:integration": "jest tests/integration --runInBand --detectOpenHandles",
+    "test:integration:watch": "jest tests/integration --watch --runInBand",
     "test:verbose": "jest --verbose",
     "lint": "eslint src/**/*.ts",
     "build": "tsc",
@@ -31,6 +32,7 @@
   "description": "",
   "dependencies": {
     "aws-sdk": "^2.1692.0",
+    "node-fetch": "^3.3.2",
     "uuid": "^11.1.0"
   },
   "devDependencies": {

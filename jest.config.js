@@ -10,7 +10,20 @@ module.exports = {
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
   setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
-  verbose: false, // Reduce console noise
-  silent: false,
-  testTimeout: 10000,
+  verbose: false,
+  testTimeout: 30000, // Increased timeout for integration tests
+  // Separate configuration for different test types
+  projects: [
+    {
+      displayName: 'unit',
+      testMatch: ['<rootDir>/tests/unit/**/*.test.ts'],
+      testTimeout: 10000,
+    },
+    {
+      displayName: 'integration',
+      testMatch: ['<rootDir>/tests/integration/**/*.test.ts'],
+      testTimeout: 30000,
+      setupFilesAfterEnv: ['<rootDir>/tests/integration/jest.setup.ts'],
+    },
+  ],
 };
