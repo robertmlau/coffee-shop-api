@@ -2,7 +2,7 @@ import { DynamoDB } from 'aws-sdk';
 import { Coffee, CreateCoffeeRequest, UpdateCoffeeRequest } from '../models/Coffee';
 
 const dynamoDb = new DynamoDB.DocumentClient();
-const TABLE_NAME = process.env.COFFEE_TABLE!;
+const TABLE_NAME = process.env.COFFEE_TABLE || 'test-coffee-table';
 
 export class DynamoService {
   async createCoffee(coffee: Coffee): Promise<Coffee> {
