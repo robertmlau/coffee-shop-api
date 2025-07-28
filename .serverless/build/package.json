@@ -8,6 +8,10 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:unit": "jest tests/unit",
+    "test:integration": "jest tests/integration --runInBand --detectOpenHandles",
+    "test:verbose": "jest --verbose",
     "lint": "eslint src/**/*.ts",
     "build": "tsc",
     "dev": "serverless offline",
@@ -25,19 +29,8 @@
   },
   "homepage": "https://github.com/robertmlau/coffee-shop-api#readme",
   "description": "",
-  "dependencies": {},
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "node",
-    "roots": [
-      "<rootDir>/tests"
-    ],
-    "testMatch": [
-      "**/*.test.ts"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.ts",
-      "!src/**/*.d.ts"
-    ]
+  "dependencies": {
+    "aws-sdk": "^2.1692.0",
+    "uuid": "^11.1.0"
   }
 }
