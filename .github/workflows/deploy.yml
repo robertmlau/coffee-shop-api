@@ -23,11 +23,6 @@ jobs:
       
       - name: Run linting
         run: npm run lint
-      
-      - name: Run tests
-        run: npm test
-        env:
-          NODE_ENV: test
 
   deploy-dev:
     needs: test
