@@ -39,7 +39,1004 @@
             ]
           }
         },
-        "versionFunctions": true
+        "versionFunctions": true,
+        "compiledCloudFormationTemplate": {
+          "AWSTemplateFormatVersion": "2010-09-09",
+          "Description": "The AWS CloudFormation template for this Serverless application",
+          "Resources": {
+            "CreateCoffeeLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/coffee-shop-api-dev-createCoffee"
+              }
+            },
+            "GetCoffeesLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/coffee-shop-api-dev-getCoffees"
+              }
+            },
+            "GetCoffeeLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/coffee-shop-api-dev-getCoffee"
+              }
+            },
+            "UpdateCoffeeLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/coffee-shop-api-dev-updateCoffee"
+              }
+            },
+            "DeleteCoffeeLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/coffee-shop-api-dev-deleteCoffee"
+              }
+            },
+            "IamRoleLambdaExecution": {
+              "Type": "AWS::IAM::Role",
+              "Properties": {
+                "AssumeRolePolicyDocument": {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Principal": {
+                        "Service": [
+                          "lambda.amazonaws.com"
+                        ]
+                      },
+                      "Action": [
+                        "sts:AssumeRole"
+                      ]
+                    }
+                  ]
+                },
+                "Policies": [
+                  {
+                    "PolicyName": {
+                      "Fn::Join": [
+                        "-",
+                        [
+                          "coffee-shop-api",
+                          "dev",
+                          "lambda"
+                        ]
+                      ]
+                    },
+                    "PolicyDocument": {
+                      "Version": "2012-10-17",
+                      "Statement": [
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:CreateLogStream",
+                            "logs:CreateLogGroup",
+                            "logs:TagResource"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/coffee-shop-api-dev*:*"
+                            }
+                          ]
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "logs:PutLogEvents"
+                          ],
+                          "Resource": [
+                            {
+                              "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/coffee-shop-api-dev*:*:*"
+                            }
+                          ]
+                        },
+                        {
+                          "Effect": "Allow",
+                          "Action": [
+                            "dynamodb:Query",
+                            "dynamodb:Scan",
+                            "dynamodb:GetItem",
+                            "dynamodb:PutItem",
+                            "dynamodb:UpdateItem",
+                            "dynamodb:DeleteItem"
+                          ],
+                          "Resource": {
+                            "Fn::GetAtt": [
+                              "CoffeeTable",
+                              "Arn"
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "Path": "/",
+                "RoleName": {
+                  "Fn::Join": [
+                    "-",
+                    [
+                      "coffee-shop-api",
+                      "dev",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      "lambdaRole"
+                    ]
+                  ]
+                }
+              }
+            },
+            "CreateCoffeeLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
+                  "S3Key": "serverless/coffee-shop-api/dev/1753668633483-2025-07-28T02:10:33.483Z/coffee-shop-api.zip"
+                },
+                "Handler": "src/handlers/createCoffee.handler",
+                "Runtime": "nodejs18.x",
+                "FunctionName": "coffee-shop-api-dev-createCoffee",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "COFFEE_TABLE": "coffee-shop-api-dev-coffees",
+                    "STAGE": "dev"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "CreateCoffeeLogGroup"
+              ]
+            },
+            "GetCoffeesLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
+                  "S3Key": "serverless/coffee-shop-api/dev/1753668633483-2025-07-28T02:10:33.483Z/coffee-shop-api.zip"
+                },
+                "Handler": "src/handlers/getCoffees.handler",
+                "Runtime": "nodejs18.x",
+                "FunctionName": "coffee-shop-api-dev-getCoffees",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "COFFEE_TABLE": "coffee-shop-api-dev-coffees",
+                    "STAGE": "dev"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "GetCoffeesLogGroup"
+              ]
+            },
+            "GetCoffeeLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
+                  "S3Key": "serverless/coffee-shop-api/dev/1753668633483-2025-07-28T02:10:33.483Z/coffee-shop-api.zip"
+                },
+                "Handler": "src/handlers/getCoffee.handler",
+                "Runtime": "nodejs18.x",
+                "FunctionName": "coffee-shop-api-dev-getCoffee",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "COFFEE_TABLE": "coffee-shop-api-dev-coffees",
+                    "STAGE": "dev"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "GetCoffeeLogGroup"
+              ]
+            },
+            "UpdateCoffeeLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
+                  "S3Key": "serverless/coffee-shop-api/dev/1753668633483-2025-07-28T02:10:33.483Z/coffee-shop-api.zip"
+                },
+                "Handler": "src/handlers/updateCoffee.handler",
+                "Runtime": "nodejs18.x",
+                "FunctionName": "coffee-shop-api-dev-updateCoffee",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "COFFEE_TABLE": "coffee-shop-api-dev-coffees",
+                    "STAGE": "dev"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "UpdateCoffeeLogGroup"
+              ]
+            },
+            "DeleteCoffeeLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
+                  "S3Key": "serverless/coffee-shop-api/dev/1753668633483-2025-07-28T02:10:33.483Z/coffee-shop-api.zip"
+                },
+                "Handler": "src/handlers/deleteCoffee.handler",
+                "Runtime": "nodejs18.x",
+                "FunctionName": "coffee-shop-api-dev-deleteCoffee",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "COFFEE_TABLE": "coffee-shop-api-dev-coffees",
+                    "STAGE": "dev"
+                  }
+                },
+                "Role": {
+                  "Fn::GetAtt": [
+                    "IamRoleLambdaExecution",
+                    "Arn"
+                  ]
+                }
+              },
+              "DependsOn": [
+                "DeleteCoffeeLogGroup"
+              ]
+            },
+            "CreateCoffeeLambdaVersionN3uR1RHvlfJO0aEb4LQz2ciQ4SXpK1DGqtRC1U1si0": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "CreateCoffeeLambdaFunction"
+                },
+                "CodeSha256": "aPnYDLuNNV9SgFkNl/nW2MYr72hVmUjTNLj0tHOgNAA="
+              }
+            },
+            "GetCoffeesLambdaVersion1seUXwkbo58uh0SrvcIAEe7UOJAmvQlrlC7GECDj4I": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "GetCoffeesLambdaFunction"
+                },
+                "CodeSha256": "aPnYDLuNNV9SgFkNl/nW2MYr72hVmUjTNLj0tHOgNAA="
+              }
+            },
+            "GetCoffeeLambdaVersion743FxF5RWJ3Trsi5cRu0EnKtqvOQrUus6GHLBOG95Q": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "GetCoffeeLambdaFunction"
+                },
+                "CodeSha256": "aPnYDLuNNV9SgFkNl/nW2MYr72hVmUjTNLj0tHOgNAA="
+              }
+            },
+            "UpdateCoffeeLambdaVersionukpE2lGPT3mkYtGxllSifwIy05ESyTJ8EXukbUnFHCw": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "UpdateCoffeeLambdaFunction"
+                },
+                "CodeSha256": "aPnYDLuNNV9SgFkNl/nW2MYr72hVmUjTNLj0tHOgNAA="
+              }
+            },
+            "DeleteCoffeeLambdaVersionpdUJyFihQGxoUb9vIeBLbnTa4E5YaDTMwCrD140x8": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "DeleteCoffeeLambdaFunction"
+                },
+                "CodeSha256": "aPnYDLuNNV9SgFkNl/nW2MYr72hVmUjTNLj0tHOgNAA="
+              }
+            },
+            "ApiGatewayRestApi": {
+              "Type": "AWS::ApiGateway::RestApi",
+              "Properties": {
+                "Name": "dev-coffee-shop-api",
+                "EndpointConfiguration": {
+                  "Types": [
+                    "EDGE"
+                  ]
+                },
+                "Policy": ""
+              }
+            },
+            "ApiGatewayResourceCoffees": {
+              "Type": "AWS::ApiGateway::Resource",
+              "Properties": {
+                "ParentId": {
+                  "Fn::GetAtt": [
+                    "ApiGatewayRestApi",
+                    "RootResourceId"
+                  ]
+                },
+                "PathPart": "coffees",
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                }
+              }
+            },
+            "ApiGatewayResourceCoffeesIdVar": {
+              "Type": "AWS::ApiGateway::Resource",
+              "Properties": {
+                "ParentId": {
+                  "Ref": "ApiGatewayResourceCoffees"
+                },
+                "PathPart": "{id}",
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                }
+              }
+            },
+            "ApiGatewayMethodCoffeesOptions": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "AuthorizationType": "NONE",
+                "HttpMethod": "OPTIONS",
+                "MethodResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": true,
+                      "method.response.header.Access-Control-Allow-Headers": true,
+                      "method.response.header.Access-Control-Allow-Methods": true
+                    },
+                    "ResponseModels": {}
+                  }
+                ],
+                "RequestParameters": {},
+                "Integration": {
+                  "Type": "MOCK",
+                  "RequestTemplates": {
+                    "application/json": "{statusCode:200}"
+                  },
+                  "ContentHandling": "CONVERT_TO_TEXT",
+                  "IntegrationResponses": [
+                    {
+                      "StatusCode": "200",
+                      "ResponseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'",
+                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,POST'"
+                      },
+                      "ResponseTemplates": {
+                        "application/json": ""
+                      }
+                    }
+                  ]
+                },
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceCoffees"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                }
+              }
+            },
+            "ApiGatewayMethodCoffeesIdVarOptions": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "AuthorizationType": "NONE",
+                "HttpMethod": "OPTIONS",
+                "MethodResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": true,
+                      "method.response.header.Access-Control-Allow-Headers": true,
+                      "method.response.header.Access-Control-Allow-Methods": true
+                    },
+                    "ResponseModels": {}
+                  }
+                ],
+                "RequestParameters": {},
+                "Integration": {
+                  "Type": "MOCK",
+                  "RequestTemplates": {
+                    "application/json": "{statusCode:200}"
+                  },
+                  "ContentHandling": "CONVERT_TO_TEXT",
+                  "IntegrationResponses": [
+                    {
+                      "StatusCode": "200",
+                      "ResponseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'",
+                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,DELETE,PUT,GET'"
+                      },
+                      "ResponseTemplates": {
+                        "application/json": ""
+                      }
+                    }
+                  ]
+                },
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceCoffeesIdVar"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                }
+              }
+            },
+            "ApiGatewayMethodCoffeesPost": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "HttpMethod": "POST",
+                "RequestParameters": {},
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceCoffees"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "ApiKeyRequired": "<REDACTED>",
+                "AuthorizationType": "NONE",
+                "Integration": {
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Fn::GetAtt": [
+                            "CreateCoffeeLambdaFunction",
+                            "Arn"
+                          ]
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  }
+                },
+                "MethodResponses": []
+              },
+              "DependsOn": [
+                "CreateCoffeeLambdaPermissionApiGateway"
+              ]
+            },
+            "ApiGatewayMethodCoffeesGet": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "HttpMethod": "GET",
+                "RequestParameters": {},
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceCoffees"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "ApiKeyRequired": "<REDACTED>",
+                "AuthorizationType": "NONE",
+                "Integration": {
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Fn::GetAtt": [
+                            "GetCoffeesLambdaFunction",
+                            "Arn"
+                          ]
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  }
+                },
+                "MethodResponses": []
+              },
+              "DependsOn": [
+                "GetCoffeesLambdaPermissionApiGateway"
+              ]
+            },
+            "ApiGatewayMethodCoffeesIdVarGet": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "HttpMethod": "GET",
+                "RequestParameters": {},
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceCoffeesIdVar"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "ApiKeyRequired": "<REDACTED>",
+                "AuthorizationType": "NONE",
+                "Integration": {
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Fn::GetAtt": [
+                            "GetCoffeeLambdaFunction",
+                            "Arn"
+                          ]
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  }
+                },
+                "MethodResponses": []
+              },
+              "DependsOn": [
+                "GetCoffeeLambdaPermissionApiGateway"
+              ]
+            },
+            "ApiGatewayMethodCoffeesIdVarPut": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "HttpMethod": "PUT",
+                "RequestParameters": {},
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceCoffeesIdVar"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "ApiKeyRequired": "<REDACTED>",
+                "AuthorizationType": "NONE",
+                "Integration": {
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Fn::GetAtt": [
+                            "UpdateCoffeeLambdaFunction",
+                            "Arn"
+                          ]
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  }
+                },
+                "MethodResponses": []
+              },
+              "DependsOn": [
+                "UpdateCoffeeLambdaPermissionApiGateway"
+              ]
+            },
+            "ApiGatewayMethodCoffeesIdVarDelete": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "HttpMethod": "DELETE",
+                "RequestParameters": {},
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceCoffeesIdVar"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "ApiKeyRequired": "<REDACTED>",
+                "AuthorizationType": "NONE",
+                "Integration": {
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Fn::GetAtt": [
+                            "DeleteCoffeeLambdaFunction",
+                            "Arn"
+                          ]
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  }
+                },
+                "MethodResponses": []
+              },
+              "DependsOn": [
+                "DeleteCoffeeLambdaPermissionApiGateway"
+              ]
+            },
+            "ApiGatewayDeployment1753668616094": {
+              "Type": "AWS::ApiGateway::Deployment",
+              "Properties": {
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "StageName": "dev"
+              },
+              "DependsOn": [
+                "ApiGatewayMethodCoffeesOptions",
+                "ApiGatewayMethodCoffeesIdVarOptions",
+                "ApiGatewayMethodCoffeesPost",
+                "ApiGatewayMethodCoffeesGet",
+                "ApiGatewayMethodCoffeesIdVarGet",
+                "ApiGatewayMethodCoffeesIdVarPut",
+                "ApiGatewayMethodCoffeesIdVarDelete"
+              ]
+            },
+            "CreateCoffeeLambdaPermissionApiGateway": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "CreateCoffeeLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "ApiGatewayRestApi"
+                      },
+                      "/*/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "GetCoffeesLambdaPermissionApiGateway": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "GetCoffeesLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "ApiGatewayRestApi"
+                      },
+                      "/*/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "GetCoffeeLambdaPermissionApiGateway": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "GetCoffeeLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "ApiGatewayRestApi"
+                      },
+                      "/*/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "UpdateCoffeeLambdaPermissionApiGateway": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "UpdateCoffeeLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "ApiGatewayRestApi"
+                      },
+                      "/*/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "DeleteCoffeeLambdaPermissionApiGateway": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "DeleteCoffeeLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "ApiGatewayRestApi"
+                      },
+                      "/*/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "CoffeeTable": {
+              "Type": "AWS::DynamoDB::Table",
+              "Properties": {
+                "TableName": "coffee-shop-api-dev-coffees",
+                "AttributeDefinitions": [
+                  {
+                    "AttributeName": "id",
+                    "AttributeType": "S"
+                  }
+                ],
+                "KeySchema": [
+                  {
+                    "AttributeName": "id",
+                    "KeyType": "HASH"
+                  }
+                ],
+                "BillingMode": "PAY_PER_REQUEST",
+                "Tags": [
+                  {
+                    "Key": "Environment",
+                    "Value": "dev"
+                  },
+                  {
+                    "Key": "Service",
+                    "Value": "coffee-shop-api"
+                  }
+                ]
+              }
+            }
+          },
+          "Outputs": {
+            "ServerlessDeploymentBucketName": {
+              "Value": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
+              "Export": {
+                "Name": "sls-coffee-shop-api-dev-ServerlessDeploymentBucketName"
+              }
+            },
+            "CreateCoffeeLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "CreateCoffeeLambdaVersionN3uR1RHvlfJO0aEb4LQz2ciQ4SXpK1DGqtRC1U1si0"
+              },
+              "Export": {
+                "Name": "sls-coffee-shop-api-dev-CreateCoffeeLambdaFunctionQualifiedArn"
+              }
+            },
+            "GetCoffeesLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "GetCoffeesLambdaVersion1seUXwkbo58uh0SrvcIAEe7UOJAmvQlrlC7GECDj4I"
+              },
+              "Export": {
+                "Name": "sls-coffee-shop-api-dev-GetCoffeesLambdaFunctionQualifiedArn"
+              }
+            },
+            "GetCoffeeLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "GetCoffeeLambdaVersion743FxF5RWJ3Trsi5cRu0EnKtqvOQrUus6GHLBOG95Q"
+              },
+              "Export": {
+                "Name": "sls-coffee-shop-api-dev-GetCoffeeLambdaFunctionQualifiedArn"
+              }
+            },
+            "UpdateCoffeeLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "UpdateCoffeeLambdaVersionukpE2lGPT3mkYtGxllSifwIy05ESyTJ8EXukbUnFHCw"
+              },
+              "Export": {
+                "Name": "sls-coffee-shop-api-dev-UpdateCoffeeLambdaFunctionQualifiedArn"
+              }
+            },
+            "DeleteCoffeeLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "DeleteCoffeeLambdaVersionpdUJyFihQGxoUb9vIeBLbnTa4E5YaDTMwCrD140x8"
+              },
+              "Export": {
+                "Name": "sls-coffee-shop-api-dev-DeleteCoffeeLambdaFunctionQualifiedArn"
+              }
+            },
+            "ServiceEndpoint": {
+              "Description": "URL of the service endpoint",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "https://",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    ".execute-api.",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ".",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    },
+                    "/dev"
+                  ]
+                ]
+              },
+              "Export": {
+                "Name": "sls-coffee-shop-api-dev-ServiceEndpoint"
+              }
+            }
+          }
+        },
+        "vpc": {}
       },
       "plugins": [
         "serverless-offline"
@@ -52,10 +1049,34 @@
               "http": {
                 "path": "coffees",
                 "method": "post",
-                "cors": true
+                "cors": {
+                  "origin": "*",
+                  "methods": [
+                    "OPTIONS",
+                    "POST"
+                  ],
+                  "headers": [
+                    "Content-Type",
+                    "X-Amz-Date",
+                    "Authorization",
+                    "X-Api-Key",
+                    "X-Amz-Security-Token",
+                    "X-Amz-User-Agent",
+                    "X-Amzn-Trace-Id"
+                  ],
+                  "allowCredentials": "<REDACTED>"
+                },
+                "integration": "AWS_PROXY"
               }
             }
-          ]
+          ],
+          "name": "coffee-shop-api-dev-createCoffee",
+          "package": {},
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs18.x",
+          "vpc": {},
+          "versionLogicalId": "CreateCoffeeLambdaVersionN3uR1RHvlfJO0aEb4LQz2ciQ4SXpK1DGqtRC1U1si0"
         },
         "getCoffees": {
           "handler": "src/handlers/getCoffees.handler",
@@ -64,10 +1085,34 @@
               "http": {
                 "path": "coffees",
                 "method": "get",
-                "cors": true
+                "cors": {
+                  "origin": "*",
+                  "methods": [
+                    "OPTIONS",
+                    "GET"
+                  ],
+                  "headers": [
+                    "Content-Type",
+                    "X-Amz-Date",
+                    "Authorization",
+                    "X-Api-Key",
+                    "X-Amz-Security-Token",
+                    "X-Amz-User-Agent",
+                    "X-Amzn-Trace-Id"
+                  ],
+                  "allowCredentials": "<REDACTED>"
+                },
+                "integration": "AWS_PROXY"
               }
             }
-          ]
+          ],
+          "name": "coffee-shop-api-dev-getCoffees",
+          "package": {},
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs18.x",
+          "vpc": {},
+          "versionLogicalId": "GetCoffeesLambdaVersion1seUXwkbo58uh0SrvcIAEe7UOJAmvQlrlC7GECDj4I"
         },
         "getCoffee": {
           "handler": "src/handlers/getCoffee.handler",
@@ -76,10 +1121,34 @@
               "http": {
                 "path": "coffees/{id}",
                 "method": "get",
-                "cors": true
+                "cors": {
+                  "origin": "*",
+                  "methods": [
+                    "OPTIONS",
+                    "GET"
+                  ],
+                  "headers": [
+                    "Content-Type",
+                    "X-Amz-Date",
+                    "Authorization",
+                    "X-Api-Key",
+                    "X-Amz-Security-Token",
+                    "X-Amz-User-Agent",
+                    "X-Amzn-Trace-Id"
+                  ],
+                  "allowCredentials": "<REDACTED>"
+                },
+                "integration": "AWS_PROXY"
               }
             }
-          ]
+          ],
+          "name": "coffee-shop-api-dev-getCoffee",
+          "package": {},
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs18.x",
+          "vpc": {},
+          "versionLogicalId": "GetCoffeeLambdaVersion743FxF5RWJ3Trsi5cRu0EnKtqvOQrUus6GHLBOG95Q"
         },
         "updateCoffee": {
           "handler": "src/handlers/updateCoffee.handler",
@@ -88,10 +1157,34 @@
               "http": {
                 "path": "coffees/{id}",
                 "method": "put",
-                "cors": true
+                "cors": {
+                  "origin": "*",
+                  "methods": [
+                    "OPTIONS",
+                    "PUT"
+                  ],
+                  "headers": [
+                    "Content-Type",
+                    "X-Amz-Date",
+                    "Authorization",
+                    "X-Api-Key",
+                    "X-Amz-Security-Token",
+                    "X-Amz-User-Agent",
+                    "X-Amzn-Trace-Id"
+                  ],
+                  "allowCredentials": "<REDACTED>"
+                },
+                "integration": "AWS_PROXY"
               }
             }
-          ]
+          ],
+          "name": "coffee-shop-api-dev-updateCoffee",
+          "package": {},
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs18.x",
+          "vpc": {},
+          "versionLogicalId": "UpdateCoffeeLambdaVersionukpE2lGPT3mkYtGxllSifwIy05ESyTJ8EXukbUnFHCw"
         },
         "deleteCoffee": {
           "handler": "src/handlers/deleteCoffee.handler",
@@ -100,10 +1193,34 @@
               "http": {
                 "path": "coffees/{id}",
                 "method": "delete",
-                "cors": true
+                "cors": {
+                  "origin": "*",
+                  "methods": [
+                    "OPTIONS",
+                    "DELETE"
+                  ],
+                  "headers": [
+                    "Content-Type",
+                    "X-Amz-Date",
+                    "Authorization",
+                    "X-Api-Key",
+                    "X-Amz-Security-Token",
+                    "X-Amz-User-Agent",
+                    "X-Amzn-Trace-Id"
+                  ],
+                  "allowCredentials": "<REDACTED>"
+                },
+                "integration": "AWS_PROXY"
               }
             }
-          ]
+          ],
+          "name": "coffee-shop-api-dev-deleteCoffee",
+          "package": {},
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs18.x",
+          "vpc": {},
+          "versionLogicalId": "DeleteCoffeeLambdaVersionpdUJyFihQGxoUb9vIeBLbnTa4E5YaDTMwCrD140x8"
         }
       },
       "resources": {
@@ -137,7 +1254,8 @@
               ]
             }
           }
-        }
+        },
+        "Outputs": {}
       },
       "custom": {
         "serverless-offline": {
@@ -188,7 +1306,1004 @@
           ]
         }
       },
-      "versionFunctions": true
+      "versionFunctions": true,
+      "compiledCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "CreateCoffeeLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/coffee-shop-api-dev-createCoffee"
+            }
+          },
+          "GetCoffeesLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/coffee-shop-api-dev-getCoffees"
+            }
+          },
+          "GetCoffeeLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/coffee-shop-api-dev-getCoffee"
+            }
+          },
+          "UpdateCoffeeLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/coffee-shop-api-dev-updateCoffee"
+            }
+          },
+          "DeleteCoffeeLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/coffee-shop-api-dev-deleteCoffee"
+            }
+          },
+          "IamRoleLambdaExecution": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "lambda.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": {
+                    "Fn::Join": [
+                      "-",
+                      [
+                        "coffee-shop-api",
+                        "dev",
+                        "lambda"
+                      ]
+                    ]
+                  },
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:CreateLogStream",
+                          "logs:CreateLogGroup",
+                          "logs:TagResource"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/coffee-shop-api-dev*:*"
+                          }
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:PutLogEvents"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/coffee-shop-api-dev*:*:*"
+                          }
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "dynamodb:Query",
+                          "dynamodb:Scan",
+                          "dynamodb:GetItem",
+                          "dynamodb:PutItem",
+                          "dynamodb:UpdateItem",
+                          "dynamodb:DeleteItem"
+                        ],
+                        "Resource": {
+                          "Fn::GetAtt": [
+                            "CoffeeTable",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              ],
+              "Path": "/",
+              "RoleName": {
+                "Fn::Join": [
+                  "-",
+                  [
+                    "coffee-shop-api",
+                    "dev",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    "lambdaRole"
+                  ]
+                ]
+              }
+            }
+          },
+          "CreateCoffeeLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
+                "S3Key": "serverless/coffee-shop-api/dev/1753668633483-2025-07-28T02:10:33.483Z/coffee-shop-api.zip"
+              },
+              "Handler": "src/handlers/createCoffee.handler",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "coffee-shop-api-dev-createCoffee",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "COFFEE_TABLE": "coffee-shop-api-dev-coffees",
+                  "STAGE": "dev"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "CreateCoffeeLogGroup"
+            ]
+          },
+          "GetCoffeesLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
+                "S3Key": "serverless/coffee-shop-api/dev/1753668633483-2025-07-28T02:10:33.483Z/coffee-shop-api.zip"
+              },
+              "Handler": "src/handlers/getCoffees.handler",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "coffee-shop-api-dev-getCoffees",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "COFFEE_TABLE": "coffee-shop-api-dev-coffees",
+                  "STAGE": "dev"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "GetCoffeesLogGroup"
+            ]
+          },
+          "GetCoffeeLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
+                "S3Key": "serverless/coffee-shop-api/dev/1753668633483-2025-07-28T02:10:33.483Z/coffee-shop-api.zip"
+              },
+              "Handler": "src/handlers/getCoffee.handler",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "coffee-shop-api-dev-getCoffee",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "COFFEE_TABLE": "coffee-shop-api-dev-coffees",
+                  "STAGE": "dev"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "GetCoffeeLogGroup"
+            ]
+          },
+          "UpdateCoffeeLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
+                "S3Key": "serverless/coffee-shop-api/dev/1753668633483-2025-07-28T02:10:33.483Z/coffee-shop-api.zip"
+              },
+              "Handler": "src/handlers/updateCoffee.handler",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "coffee-shop-api-dev-updateCoffee",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "COFFEE_TABLE": "coffee-shop-api-dev-coffees",
+                  "STAGE": "dev"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "UpdateCoffeeLogGroup"
+            ]
+          },
+          "DeleteCoffeeLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
+                "S3Key": "serverless/coffee-shop-api/dev/1753668633483-2025-07-28T02:10:33.483Z/coffee-shop-api.zip"
+              },
+              "Handler": "src/handlers/deleteCoffee.handler",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "coffee-shop-api-dev-deleteCoffee",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "COFFEE_TABLE": "coffee-shop-api-dev-coffees",
+                  "STAGE": "dev"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "DeleteCoffeeLogGroup"
+            ]
+          },
+          "CreateCoffeeLambdaVersionN3uR1RHvlfJO0aEb4LQz2ciQ4SXpK1DGqtRC1U1si0": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "CreateCoffeeLambdaFunction"
+              },
+              "CodeSha256": "aPnYDLuNNV9SgFkNl/nW2MYr72hVmUjTNLj0tHOgNAA="
+            }
+          },
+          "GetCoffeesLambdaVersion1seUXwkbo58uh0SrvcIAEe7UOJAmvQlrlC7GECDj4I": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "GetCoffeesLambdaFunction"
+              },
+              "CodeSha256": "aPnYDLuNNV9SgFkNl/nW2MYr72hVmUjTNLj0tHOgNAA="
+            }
+          },
+          "GetCoffeeLambdaVersion743FxF5RWJ3Trsi5cRu0EnKtqvOQrUus6GHLBOG95Q": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "GetCoffeeLambdaFunction"
+              },
+              "CodeSha256": "aPnYDLuNNV9SgFkNl/nW2MYr72hVmUjTNLj0tHOgNAA="
+            }
+          },
+          "UpdateCoffeeLambdaVersionukpE2lGPT3mkYtGxllSifwIy05ESyTJ8EXukbUnFHCw": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "UpdateCoffeeLambdaFunction"
+              },
+              "CodeSha256": "aPnYDLuNNV9SgFkNl/nW2MYr72hVmUjTNLj0tHOgNAA="
+            }
+          },
+          "DeleteCoffeeLambdaVersionpdUJyFihQGxoUb9vIeBLbnTa4E5YaDTMwCrD140x8": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "DeleteCoffeeLambdaFunction"
+              },
+              "CodeSha256": "aPnYDLuNNV9SgFkNl/nW2MYr72hVmUjTNLj0tHOgNAA="
+            }
+          },
+          "ApiGatewayRestApi": {
+            "Type": "AWS::ApiGateway::RestApi",
+            "Properties": {
+              "Name": "dev-coffee-shop-api",
+              "EndpointConfiguration": {
+                "Types": [
+                  "EDGE"
+                ]
+              },
+              "Policy": ""
+            }
+          },
+          "ApiGatewayResourceCoffees": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "coffees",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceCoffeesIdVar": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceCoffees"
+              },
+              "PathPart": "{id}",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodCoffeesOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceCoffees"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodCoffeesIdVarOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,DELETE,PUT,GET'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceCoffeesIdVar"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodCoffeesPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceCoffees"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": "<REDACTED>",
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "CreateCoffeeLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "CreateCoffeeLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayMethodCoffeesGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceCoffees"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": "<REDACTED>",
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "GetCoffeesLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "GetCoffeesLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayMethodCoffeesIdVarGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceCoffeesIdVar"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": "<REDACTED>",
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "GetCoffeeLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "GetCoffeeLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayMethodCoffeesIdVarPut": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "PUT",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceCoffeesIdVar"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": "<REDACTED>",
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "UpdateCoffeeLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "UpdateCoffeeLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayMethodCoffeesIdVarDelete": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "DELETE",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceCoffeesIdVar"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": "<REDACTED>",
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "DeleteCoffeeLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "DeleteCoffeeLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayDeployment1753668616094": {
+            "Type": "AWS::ApiGateway::Deployment",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "StageName": "dev"
+            },
+            "DependsOn": [
+              "ApiGatewayMethodCoffeesOptions",
+              "ApiGatewayMethodCoffeesIdVarOptions",
+              "ApiGatewayMethodCoffeesPost",
+              "ApiGatewayMethodCoffeesGet",
+              "ApiGatewayMethodCoffeesIdVarGet",
+              "ApiGatewayMethodCoffeesIdVarPut",
+              "ApiGatewayMethodCoffeesIdVarDelete"
+            ]
+          },
+          "CreateCoffeeLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "CreateCoffeeLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "GetCoffeesLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "GetCoffeesLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "GetCoffeeLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "GetCoffeeLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "UpdateCoffeeLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "UpdateCoffeeLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "DeleteCoffeeLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "DeleteCoffeeLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "CoffeeTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "coffee-shop-api-dev-coffees",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "id",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "id",
+                  "KeyType": "HASH"
+                }
+              ],
+              "BillingMode": "PAY_PER_REQUEST",
+              "Tags": [
+                {
+                  "Key": "Environment",
+                  "Value": "dev"
+                },
+                {
+                  "Key": "Service",
+                  "Value": "coffee-shop-api"
+                }
+              ]
+            }
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
+            "Export": {
+              "Name": "sls-coffee-shop-api-dev-ServerlessDeploymentBucketName"
+            }
+          },
+          "CreateCoffeeLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "CreateCoffeeLambdaVersionN3uR1RHvlfJO0aEb4LQz2ciQ4SXpK1DGqtRC1U1si0"
+            },
+            "Export": {
+              "Name": "sls-coffee-shop-api-dev-CreateCoffeeLambdaFunctionQualifiedArn"
+            }
+          },
+          "GetCoffeesLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "GetCoffeesLambdaVersion1seUXwkbo58uh0SrvcIAEe7UOJAmvQlrlC7GECDj4I"
+            },
+            "Export": {
+              "Name": "sls-coffee-shop-api-dev-GetCoffeesLambdaFunctionQualifiedArn"
+            }
+          },
+          "GetCoffeeLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "GetCoffeeLambdaVersion743FxF5RWJ3Trsi5cRu0EnKtqvOQrUus6GHLBOG95Q"
+            },
+            "Export": {
+              "Name": "sls-coffee-shop-api-dev-GetCoffeeLambdaFunctionQualifiedArn"
+            }
+          },
+          "UpdateCoffeeLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "UpdateCoffeeLambdaVersionukpE2lGPT3mkYtGxllSifwIy05ESyTJ8EXukbUnFHCw"
+            },
+            "Export": {
+              "Name": "sls-coffee-shop-api-dev-UpdateCoffeeLambdaFunctionQualifiedArn"
+            }
+          },
+          "DeleteCoffeeLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "DeleteCoffeeLambdaVersionpdUJyFihQGxoUb9vIeBLbnTa4E5YaDTMwCrD140x8"
+            },
+            "Export": {
+              "Name": "sls-coffee-shop-api-dev-DeleteCoffeeLambdaFunctionQualifiedArn"
+            }
+          },
+          "ServiceEndpoint": {
+            "Description": "URL of the service endpoint",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  ".execute-api.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/dev"
+                ]
+              ]
+            },
+            "Export": {
+              "Name": "sls-coffee-shop-api-dev-ServiceEndpoint"
+            }
+          }
+        }
+      },
+      "vpc": {}
     },
     "dashboard": {
       "isEnabledForService": true,
@@ -208,19 +2323,12 @@
       "serviceProvider": null,
       "instanceParameters": null
     },
-    "error": {
-      "message": "The \"config credentials\" command was deprecated in v4. To configure your AWS credentials, run the \"serverless\" command instead.",
-      "code": "UNRECOGNIZED_CLI_COMMAND"
-    },
     "serviceRawFile": "# \"org\" ensures this Service is used with the correct Serverless Framework Access Key.\norg: lionking\n# \"app\" enables Serverless Framework Dashboard features and sharing them with other Services.\napp: coffee-shop-api\nservice: coffee-shop-api\n\nprovider:\n  name: aws\n  runtime: nodejs18.x\n  region: ${opt:region, 'us-east-1'}\n  stage: ${opt:stage, 'dev'}\n  environment:\n    COFFEE_TABLE: ${self:service}-${self:provider.stage}-coffees\n    STAGE: ${self:provider.stage}\n  iam:\n    role:\n      statements:\n        - Effect: Allow\n          Action:\n            - dynamodb:Query\n            - dynamodb:Scan\n            - dynamodb:GetItem\n            - dynamodb:PutItem\n            - dynamodb:UpdateItem\n            - dynamodb:DeleteItem\n          Resource: !GetAtt CoffeeTable.Arn\n\nplugins:\n  - serverless-offline\n\nfunctions:\n  createCoffee:\n    handler: src/handlers/createCoffee.handler\n    events:\n      - http:\n          path: coffees\n          method: post\n          cors: true\n\n  getCoffees:\n    handler: src/handlers/getCoffees.handler\n    events:\n      - http:\n          path: coffees\n          method: get\n          cors: true\n\n  getCoffee:\n    handler: src/handlers/getCoffee.handler\n    events:\n      - http:\n          path: coffees/{id}\n          method: get\n          cors: true\n\n  updateCoffee:\n    handler: src/handlers/updateCoffee.handler\n    events:\n      - http:\n          path: coffees/{id}\n          method: put\n          cors: true\n\n  deleteCoffee:\n    handler: src/handlers/deleteCoffee.handler\n    events:\n      - http:\n          path: coffees/{id}\n          method: delete\n          cors: true\n\nresources:\n  Resources:\n    CoffeeTable:\n      Type: AWS::DynamoDB::Table\n      Properties:\n        TableName: ${self:provider.environment.COFFEE_TABLE}\n        AttributeDefinitions:\n          - AttributeName: id\n            AttributeType: S\n        KeySchema:\n          - AttributeName: id\n            KeyType: HASH\n        BillingMode: PAY_PER_REQUEST\n        Tags:\n          - Key: Environment\n            Value: ${self:provider.stage}\n          - Key: Service\n            Value: ${self:service}\n\ncustom:\n  serverless-offline:\n    httpPort: 3000\n\nbuild:\n  esbuild:\n    bundle: true\n    minify: true\n    sourcemap: false\n    external:\n      - 'aws-sdk'\n      - 'uuid'\n\n",
     "command": [
-      "config",
-      "credentials"
+      "deploy"
     ],
     "options": {
-      "provider": "aws",
-      "key": "AKIA35GKR37MLTVBPOER",
-      "secret": "<REDACTED>"
+      "stage": "dev"
     },
     "orgId": "f270848c-1523-4c32-b780-be8ae199976d",
     "orgName": "lionking",
@@ -274,6 +2382,1002 @@
         "Description": "Current Lambda function version",
         "ExportName": "sls-coffee-shop-api-dev-UpdateCoffeeLambdaFunctionQualifiedArn"
       }
-    ]
+    ],
+    "compiledCloudFormationTemplate": {
+      "AWSTemplateFormatVersion": "2010-09-09",
+      "Description": "The AWS CloudFormation template for this Serverless application",
+      "Resources": {
+        "CreateCoffeeLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/coffee-shop-api-dev-createCoffee"
+          }
+        },
+        "GetCoffeesLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/coffee-shop-api-dev-getCoffees"
+          }
+        },
+        "GetCoffeeLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/coffee-shop-api-dev-getCoffee"
+          }
+        },
+        "UpdateCoffeeLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/coffee-shop-api-dev-updateCoffee"
+          }
+        },
+        "DeleteCoffeeLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/coffee-shop-api-dev-deleteCoffee"
+          }
+        },
+        "IamRoleLambdaExecution": {
+          "Type": "AWS::IAM::Role",
+          "Properties": {
+            "AssumeRolePolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Principal": {
+                    "Service": [
+                      "lambda.amazonaws.com"
+                    ]
+                  },
+                  "Action": [
+                    "sts:AssumeRole"
+                  ]
+                }
+              ]
+            },
+            "Policies": [
+              {
+                "PolicyName": {
+                  "Fn::Join": [
+                    "-",
+                    [
+                      "coffee-shop-api",
+                      "dev",
+                      "lambda"
+                    ]
+                  ]
+                },
+                "PolicyDocument": {
+                  "Version": "2012-10-17",
+                  "Statement": [
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "logs:CreateLogStream",
+                        "logs:CreateLogGroup",
+                        "logs:TagResource"
+                      ],
+                      "Resource": [
+                        {
+                          "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/coffee-shop-api-dev*:*"
+                        }
+                      ]
+                    },
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "logs:PutLogEvents"
+                      ],
+                      "Resource": [
+                        {
+                          "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/coffee-shop-api-dev*:*:*"
+                        }
+                      ]
+                    },
+                    {
+                      "Effect": "Allow",
+                      "Action": [
+                        "dynamodb:Query",
+                        "dynamodb:Scan",
+                        "dynamodb:GetItem",
+                        "dynamodb:PutItem",
+                        "dynamodb:UpdateItem",
+                        "dynamodb:DeleteItem"
+                      ],
+                      "Resource": {
+                        "Fn::GetAtt": [
+                          "CoffeeTable",
+                          "Arn"
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "Path": "/",
+            "RoleName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "coffee-shop-api",
+                  "dev",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  "lambdaRole"
+                ]
+              ]
+            }
+          }
+        },
+        "CreateCoffeeLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
+              "S3Key": "serverless/coffee-shop-api/dev/1753668633483-2025-07-28T02:10:33.483Z/coffee-shop-api.zip"
+            },
+            "Handler": "src/handlers/createCoffee.handler",
+            "Runtime": "nodejs18.x",
+            "FunctionName": "coffee-shop-api-dev-createCoffee",
+            "MemorySize": 1024,
+            "Timeout": 6,
+            "Environment": {
+              "Variables": {
+                "COFFEE_TABLE": "coffee-shop-api-dev-coffees",
+                "STAGE": "dev"
+              }
+            },
+            "Role": {
+              "Fn::GetAtt": [
+                "IamRoleLambdaExecution",
+                "Arn"
+              ]
+            }
+          },
+          "DependsOn": [
+            "CreateCoffeeLogGroup"
+          ]
+        },
+        "GetCoffeesLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
+              "S3Key": "serverless/coffee-shop-api/dev/1753668633483-2025-07-28T02:10:33.483Z/coffee-shop-api.zip"
+            },
+            "Handler": "src/handlers/getCoffees.handler",
+            "Runtime": "nodejs18.x",
+            "FunctionName": "coffee-shop-api-dev-getCoffees",
+            "MemorySize": 1024,
+            "Timeout": 6,
+            "Environment": {
+              "Variables": {
+                "COFFEE_TABLE": "coffee-shop-api-dev-coffees",
+                "STAGE": "dev"
+              }
+            },
+            "Role": {
+              "Fn::GetAtt": [
+                "IamRoleLambdaExecution",
+                "Arn"
+              ]
+            }
+          },
+          "DependsOn": [
+            "GetCoffeesLogGroup"
+          ]
+        },
+        "GetCoffeeLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
+              "S3Key": "serverless/coffee-shop-api/dev/1753668633483-2025-07-28T02:10:33.483Z/coffee-shop-api.zip"
+            },
+            "Handler": "src/handlers/getCoffee.handler",
+            "Runtime": "nodejs18.x",
+            "FunctionName": "coffee-shop-api-dev-getCoffee",
+            "MemorySize": 1024,
+            "Timeout": 6,
+            "Environment": {
+              "Variables": {
+                "COFFEE_TABLE": "coffee-shop-api-dev-coffees",
+                "STAGE": "dev"
+              }
+            },
+            "Role": {
+              "Fn::GetAtt": [
+                "IamRoleLambdaExecution",
+                "Arn"
+              ]
+            }
+          },
+          "DependsOn": [
+            "GetCoffeeLogGroup"
+          ]
+        },
+        "UpdateCoffeeLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
+              "S3Key": "serverless/coffee-shop-api/dev/1753668633483-2025-07-28T02:10:33.483Z/coffee-shop-api.zip"
+            },
+            "Handler": "src/handlers/updateCoffee.handler",
+            "Runtime": "nodejs18.x",
+            "FunctionName": "coffee-shop-api-dev-updateCoffee",
+            "MemorySize": 1024,
+            "Timeout": 6,
+            "Environment": {
+              "Variables": {
+                "COFFEE_TABLE": "coffee-shop-api-dev-coffees",
+                "STAGE": "dev"
+              }
+            },
+            "Role": {
+              "Fn::GetAtt": [
+                "IamRoleLambdaExecution",
+                "Arn"
+              ]
+            }
+          },
+          "DependsOn": [
+            "UpdateCoffeeLogGroup"
+          ]
+        },
+        "DeleteCoffeeLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
+              "S3Key": "serverless/coffee-shop-api/dev/1753668633483-2025-07-28T02:10:33.483Z/coffee-shop-api.zip"
+            },
+            "Handler": "src/handlers/deleteCoffee.handler",
+            "Runtime": "nodejs18.x",
+            "FunctionName": "coffee-shop-api-dev-deleteCoffee",
+            "MemorySize": 1024,
+            "Timeout": 6,
+            "Environment": {
+              "Variables": {
+                "COFFEE_TABLE": "coffee-shop-api-dev-coffees",
+                "STAGE": "dev"
+              }
+            },
+            "Role": {
+              "Fn::GetAtt": [
+                "IamRoleLambdaExecution",
+                "Arn"
+              ]
+            }
+          },
+          "DependsOn": [
+            "DeleteCoffeeLogGroup"
+          ]
+        },
+        "CreateCoffeeLambdaVersionN3uR1RHvlfJO0aEb4LQz2ciQ4SXpK1DGqtRC1U1si0": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "CreateCoffeeLambdaFunction"
+            },
+            "CodeSha256": "aPnYDLuNNV9SgFkNl/nW2MYr72hVmUjTNLj0tHOgNAA="
+          }
+        },
+        "GetCoffeesLambdaVersion1seUXwkbo58uh0SrvcIAEe7UOJAmvQlrlC7GECDj4I": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "GetCoffeesLambdaFunction"
+            },
+            "CodeSha256": "aPnYDLuNNV9SgFkNl/nW2MYr72hVmUjTNLj0tHOgNAA="
+          }
+        },
+        "GetCoffeeLambdaVersion743FxF5RWJ3Trsi5cRu0EnKtqvOQrUus6GHLBOG95Q": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "GetCoffeeLambdaFunction"
+            },
+            "CodeSha256": "aPnYDLuNNV9SgFkNl/nW2MYr72hVmUjTNLj0tHOgNAA="
+          }
+        },
+        "UpdateCoffeeLambdaVersionukpE2lGPT3mkYtGxllSifwIy05ESyTJ8EXukbUnFHCw": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "UpdateCoffeeLambdaFunction"
+            },
+            "CodeSha256": "aPnYDLuNNV9SgFkNl/nW2MYr72hVmUjTNLj0tHOgNAA="
+          }
+        },
+        "DeleteCoffeeLambdaVersionpdUJyFihQGxoUb9vIeBLbnTa4E5YaDTMwCrD140x8": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "DeleteCoffeeLambdaFunction"
+            },
+            "CodeSha256": "aPnYDLuNNV9SgFkNl/nW2MYr72hVmUjTNLj0tHOgNAA="
+          }
+        },
+        "ApiGatewayRestApi": {
+          "Type": "AWS::ApiGateway::RestApi",
+          "Properties": {
+            "Name": "dev-coffee-shop-api",
+            "EndpointConfiguration": {
+              "Types": [
+                "EDGE"
+              ]
+            },
+            "Policy": ""
+          }
+        },
+        "ApiGatewayResourceCoffees": {
+          "Type": "AWS::ApiGateway::Resource",
+          "Properties": {
+            "ParentId": {
+              "Fn::GetAtt": [
+                "ApiGatewayRestApi",
+                "RootResourceId"
+              ]
+            },
+            "PathPart": "coffees",
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            }
+          }
+        },
+        "ApiGatewayResourceCoffeesIdVar": {
+          "Type": "AWS::ApiGateway::Resource",
+          "Properties": {
+            "ParentId": {
+              "Ref": "ApiGatewayResourceCoffees"
+            },
+            "PathPart": "{id}",
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            }
+          }
+        },
+        "ApiGatewayMethodCoffeesOptions": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "AuthorizationType": "NONE",
+            "HttpMethod": "OPTIONS",
+            "MethodResponses": [
+              {
+                "StatusCode": "200",
+                "ResponseParameters": {
+                  "method.response.header.Access-Control-Allow-Origin": true,
+                  "method.response.header.Access-Control-Allow-Headers": true,
+                  "method.response.header.Access-Control-Allow-Methods": true
+                },
+                "ResponseModels": {}
+              }
+            ],
+            "RequestParameters": {},
+            "Integration": {
+              "Type": "MOCK",
+              "RequestTemplates": {
+                "application/json": "{statusCode:200}"
+              },
+              "ContentHandling": "CONVERT_TO_TEXT",
+              "IntegrationResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": "'*'",
+                    "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                    "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,POST'"
+                  },
+                  "ResponseTemplates": {
+                    "application/json": ""
+                  }
+                }
+              ]
+            },
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceCoffees"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            }
+          }
+        },
+        "ApiGatewayMethodCoffeesIdVarOptions": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "AuthorizationType": "NONE",
+            "HttpMethod": "OPTIONS",
+            "MethodResponses": [
+              {
+                "StatusCode": "200",
+                "ResponseParameters": {
+                  "method.response.header.Access-Control-Allow-Origin": true,
+                  "method.response.header.Access-Control-Allow-Headers": true,
+                  "method.response.header.Access-Control-Allow-Methods": true
+                },
+                "ResponseModels": {}
+              }
+            ],
+            "RequestParameters": {},
+            "Integration": {
+              "Type": "MOCK",
+              "RequestTemplates": {
+                "application/json": "{statusCode:200}"
+              },
+              "ContentHandling": "CONVERT_TO_TEXT",
+              "IntegrationResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": "'*'",
+                    "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                    "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,DELETE,PUT,GET'"
+                  },
+                  "ResponseTemplates": {
+                    "application/json": ""
+                  }
+                }
+              ]
+            },
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceCoffeesIdVar"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            }
+          }
+        },
+        "ApiGatewayMethodCoffeesPost": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "HttpMethod": "POST",
+            "RequestParameters": {},
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceCoffees"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "ApiKeyRequired": "<REDACTED>",
+            "AuthorizationType": "NONE",
+            "Integration": {
+              "IntegrationHttpMethod": "POST",
+              "Type": "AWS_PROXY",
+              "Uri": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":apigateway:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":lambda:path/2015-03-31/functions/",
+                    {
+                      "Fn::GetAtt": [
+                        "CreateCoffeeLambdaFunction",
+                        "Arn"
+                      ]
+                    },
+                    "/invocations"
+                  ]
+                ]
+              }
+            },
+            "MethodResponses": []
+          },
+          "DependsOn": [
+            "CreateCoffeeLambdaPermissionApiGateway"
+          ]
+        },
+        "ApiGatewayMethodCoffeesGet": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "HttpMethod": "GET",
+            "RequestParameters": {},
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceCoffees"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "ApiKeyRequired": "<REDACTED>",
+            "AuthorizationType": "NONE",
+            "Integration": {
+              "IntegrationHttpMethod": "POST",
+              "Type": "AWS_PROXY",
+              "Uri": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":apigateway:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":lambda:path/2015-03-31/functions/",
+                    {
+                      "Fn::GetAtt": [
+                        "GetCoffeesLambdaFunction",
+                        "Arn"
+                      ]
+                    },
+                    "/invocations"
+                  ]
+                ]
+              }
+            },
+            "MethodResponses": []
+          },
+          "DependsOn": [
+            "GetCoffeesLambdaPermissionApiGateway"
+          ]
+        },
+        "ApiGatewayMethodCoffeesIdVarGet": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "HttpMethod": "GET",
+            "RequestParameters": {},
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceCoffeesIdVar"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "ApiKeyRequired": "<REDACTED>",
+            "AuthorizationType": "NONE",
+            "Integration": {
+              "IntegrationHttpMethod": "POST",
+              "Type": "AWS_PROXY",
+              "Uri": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":apigateway:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":lambda:path/2015-03-31/functions/",
+                    {
+                      "Fn::GetAtt": [
+                        "GetCoffeeLambdaFunction",
+                        "Arn"
+                      ]
+                    },
+                    "/invocations"
+                  ]
+                ]
+              }
+            },
+            "MethodResponses": []
+          },
+          "DependsOn": [
+            "GetCoffeeLambdaPermissionApiGateway"
+          ]
+        },
+        "ApiGatewayMethodCoffeesIdVarPut": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "HttpMethod": "PUT",
+            "RequestParameters": {},
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceCoffeesIdVar"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "ApiKeyRequired": "<REDACTED>",
+            "AuthorizationType": "NONE",
+            "Integration": {
+              "IntegrationHttpMethod": "POST",
+              "Type": "AWS_PROXY",
+              "Uri": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":apigateway:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":lambda:path/2015-03-31/functions/",
+                    {
+                      "Fn::GetAtt": [
+                        "UpdateCoffeeLambdaFunction",
+                        "Arn"
+                      ]
+                    },
+                    "/invocations"
+                  ]
+                ]
+              }
+            },
+            "MethodResponses": []
+          },
+          "DependsOn": [
+            "UpdateCoffeeLambdaPermissionApiGateway"
+          ]
+        },
+        "ApiGatewayMethodCoffeesIdVarDelete": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "HttpMethod": "DELETE",
+            "RequestParameters": {},
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceCoffeesIdVar"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "ApiKeyRequired": "<REDACTED>",
+            "AuthorizationType": "NONE",
+            "Integration": {
+              "IntegrationHttpMethod": "POST",
+              "Type": "AWS_PROXY",
+              "Uri": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":apigateway:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":lambda:path/2015-03-31/functions/",
+                    {
+                      "Fn::GetAtt": [
+                        "DeleteCoffeeLambdaFunction",
+                        "Arn"
+                      ]
+                    },
+                    "/invocations"
+                  ]
+                ]
+              }
+            },
+            "MethodResponses": []
+          },
+          "DependsOn": [
+            "DeleteCoffeeLambdaPermissionApiGateway"
+          ]
+        },
+        "ApiGatewayDeployment1753668616094": {
+          "Type": "AWS::ApiGateway::Deployment",
+          "Properties": {
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "StageName": "dev"
+          },
+          "DependsOn": [
+            "ApiGatewayMethodCoffeesOptions",
+            "ApiGatewayMethodCoffeesIdVarOptions",
+            "ApiGatewayMethodCoffeesPost",
+            "ApiGatewayMethodCoffeesGet",
+            "ApiGatewayMethodCoffeesIdVarGet",
+            "ApiGatewayMethodCoffeesIdVarPut",
+            "ApiGatewayMethodCoffeesIdVarDelete"
+          ]
+        },
+        "CreateCoffeeLambdaPermissionApiGateway": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
+              "Fn::GetAtt": [
+                "CreateCoffeeLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "apigateway.amazonaws.com",
+            "SourceArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":execute-api:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  "/*/*"
+                ]
+              ]
+            }
+          }
+        },
+        "GetCoffeesLambdaPermissionApiGateway": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
+              "Fn::GetAtt": [
+                "GetCoffeesLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "apigateway.amazonaws.com",
+            "SourceArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":execute-api:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  "/*/*"
+                ]
+              ]
+            }
+          }
+        },
+        "GetCoffeeLambdaPermissionApiGateway": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
+              "Fn::GetAtt": [
+                "GetCoffeeLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "apigateway.amazonaws.com",
+            "SourceArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":execute-api:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  "/*/*"
+                ]
+              ]
+            }
+          }
+        },
+        "UpdateCoffeeLambdaPermissionApiGateway": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
+              "Fn::GetAtt": [
+                "UpdateCoffeeLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "apigateway.amazonaws.com",
+            "SourceArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":execute-api:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  "/*/*"
+                ]
+              ]
+            }
+          }
+        },
+        "DeleteCoffeeLambdaPermissionApiGateway": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
+              "Fn::GetAtt": [
+                "DeleteCoffeeLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "apigateway.amazonaws.com",
+            "SourceArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":execute-api:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  "/*/*"
+                ]
+              ]
+            }
+          }
+        },
+        "CoffeeTable": {
+          "Type": "AWS::DynamoDB::Table",
+          "Properties": {
+            "TableName": "coffee-shop-api-dev-coffees",
+            "AttributeDefinitions": [
+              {
+                "AttributeName": "id",
+                "AttributeType": "S"
+              }
+            ],
+            "KeySchema": [
+              {
+                "AttributeName": "id",
+                "KeyType": "HASH"
+              }
+            ],
+            "BillingMode": "PAY_PER_REQUEST",
+            "Tags": [
+              {
+                "Key": "Environment",
+                "Value": "dev"
+              },
+              {
+                "Key": "Service",
+                "Value": "coffee-shop-api"
+              }
+            ]
+          }
+        }
+      },
+      "Outputs": {
+        "ServerlessDeploymentBucketName": {
+          "Value": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
+          "Export": {
+            "Name": "sls-coffee-shop-api-dev-ServerlessDeploymentBucketName"
+          }
+        },
+        "CreateCoffeeLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "CreateCoffeeLambdaVersionN3uR1RHvlfJO0aEb4LQz2ciQ4SXpK1DGqtRC1U1si0"
+          },
+          "Export": {
+            "Name": "sls-coffee-shop-api-dev-CreateCoffeeLambdaFunctionQualifiedArn"
+          }
+        },
+        "GetCoffeesLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "GetCoffeesLambdaVersion1seUXwkbo58uh0SrvcIAEe7UOJAmvQlrlC7GECDj4I"
+          },
+          "Export": {
+            "Name": "sls-coffee-shop-api-dev-GetCoffeesLambdaFunctionQualifiedArn"
+          }
+        },
+        "GetCoffeeLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "GetCoffeeLambdaVersion743FxF5RWJ3Trsi5cRu0EnKtqvOQrUus6GHLBOG95Q"
+          },
+          "Export": {
+            "Name": "sls-coffee-shop-api-dev-GetCoffeeLambdaFunctionQualifiedArn"
+          }
+        },
+        "UpdateCoffeeLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "UpdateCoffeeLambdaVersionukpE2lGPT3mkYtGxllSifwIy05ESyTJ8EXukbUnFHCw"
+          },
+          "Export": {
+            "Name": "sls-coffee-shop-api-dev-UpdateCoffeeLambdaFunctionQualifiedArn"
+          }
+        },
+        "DeleteCoffeeLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "DeleteCoffeeLambdaVersionpdUJyFihQGxoUb9vIeBLbnTa4E5YaDTMwCrD140x8"
+          },
+          "Export": {
+            "Name": "sls-coffee-shop-api-dev-DeleteCoffeeLambdaFunctionQualifiedArn"
+          }
+        },
+        "ServiceEndpoint": {
+          "Description": "URL of the service endpoint",
+          "Value": {
+            "Fn::Join": [
+              "",
+              [
+                "https://",
+                {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                ".execute-api.",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ".",
+                {
+                  "Ref": "AWS::URLSuffix"
+                },
+                "/dev"
+              ]
+            ]
+          },
+          "Export": {
+            "Name": "sls-coffee-shop-api-dev-ServiceEndpoint"
+          }
+        }
+      }
+    }
   }
 }

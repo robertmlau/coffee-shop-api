@@ -157,7 +157,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
-                "S3Key": "serverless/coffee-shop-api/dev/1753666486830-2025-07-28T01:34:46.830Z/coffee-shop-api.zip"
+                "S3Key": "serverless/coffee-shop-api/dev/1753668633483-2025-07-28T02:10:33.483Z/coffee-shop-api.zip"
               },
               "Handler": "src/handlers/createCoffee.handler",
               "Runtime": "nodejs18.x",
@@ -186,7 +186,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
-                "S3Key": "serverless/coffee-shop-api/dev/1753666486830-2025-07-28T01:34:46.830Z/coffee-shop-api.zip"
+                "S3Key": "serverless/coffee-shop-api/dev/1753668633483-2025-07-28T02:10:33.483Z/coffee-shop-api.zip"
               },
               "Handler": "src/handlers/getCoffees.handler",
               "Runtime": "nodejs18.x",
@@ -215,7 +215,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
-                "S3Key": "serverless/coffee-shop-api/dev/1753666486830-2025-07-28T01:34:46.830Z/coffee-shop-api.zip"
+                "S3Key": "serverless/coffee-shop-api/dev/1753668633483-2025-07-28T02:10:33.483Z/coffee-shop-api.zip"
               },
               "Handler": "src/handlers/getCoffee.handler",
               "Runtime": "nodejs18.x",
@@ -244,7 +244,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
-                "S3Key": "serverless/coffee-shop-api/dev/1753666486830-2025-07-28T01:34:46.830Z/coffee-shop-api.zip"
+                "S3Key": "serverless/coffee-shop-api/dev/1753668633483-2025-07-28T02:10:33.483Z/coffee-shop-api.zip"
               },
               "Handler": "src/handlers/updateCoffee.handler",
               "Runtime": "nodejs18.x",
@@ -273,7 +273,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "serverless-framework-deployments-us-east-1-f279c67f-2d5a",
-                "S3Key": "serverless/coffee-shop-api/dev/1753666486830-2025-07-28T01:34:46.830Z/coffee-shop-api.zip"
+                "S3Key": "serverless/coffee-shop-api/dev/1753668633483-2025-07-28T02:10:33.483Z/coffee-shop-api.zip"
               },
               "Handler": "src/handlers/deleteCoffee.handler",
               "Runtime": "nodejs18.x",
@@ -297,54 +297,54 @@
               "DeleteCoffeeLogGroup"
             ]
           },
-          "CreateCoffeeLambdaVersionRZpqFiyBGOmY3zD5viWDs3jblbSAClvZei8t9AFnU": {
+          "CreateCoffeeLambdaVersionN3uR1RHvlfJO0aEb4LQz2ciQ4SXpK1DGqtRC1U1si0": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CreateCoffeeLambdaFunction"
               },
-              "CodeSha256": "0C/xqZLi8QzV3whWULpjb98Zpnf25Qszu5vLBWNnYSQ="
+              "CodeSha256": "aPnYDLuNNV9SgFkNl/nW2MYr72hVmUjTNLj0tHOgNAA="
             }
           },
-          "GetCoffeesLambdaVersionrZigvrlntAHPWgXEGNeQ1VQZxZqw6W5P5CVMoJdcY": {
+          "GetCoffeesLambdaVersion1seUXwkbo58uh0SrvcIAEe7UOJAmvQlrlC7GECDj4I": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetCoffeesLambdaFunction"
               },
-              "CodeSha256": "0C/xqZLi8QzV3whWULpjb98Zpnf25Qszu5vLBWNnYSQ="
+              "CodeSha256": "aPnYDLuNNV9SgFkNl/nW2MYr72hVmUjTNLj0tHOgNAA="
             }
           },
-          "GetCoffeeLambdaVersion6E42NPVrrWyV9NO8dIkAFz78VuSuWl7ubqQSywK84": {
+          "GetCoffeeLambdaVersion743FxF5RWJ3Trsi5cRu0EnKtqvOQrUus6GHLBOG95Q": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetCoffeeLambdaFunction"
               },
-              "CodeSha256": "0C/xqZLi8QzV3whWULpjb98Zpnf25Qszu5vLBWNnYSQ="
+              "CodeSha256": "aPnYDLuNNV9SgFkNl/nW2MYr72hVmUjTNLj0tHOgNAA="
             }
           },
-          "UpdateCoffeeLambdaVersionG26614rZy7l4Pk3e7auCaGMcjozNGAWI7Yev3qJFg30": {
+          "UpdateCoffeeLambdaVersionukpE2lGPT3mkYtGxllSifwIy05ESyTJ8EXukbUnFHCw": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "UpdateCoffeeLambdaFunction"
               },
-              "CodeSha256": "0C/xqZLi8QzV3whWULpjb98Zpnf25Qszu5vLBWNnYSQ="
+              "CodeSha256": "aPnYDLuNNV9SgFkNl/nW2MYr72hVmUjTNLj0tHOgNAA="
             }
           },
-          "DeleteCoffeeLambdaVersionE22Z6cYyCkXUcBfBrJPlmMweYP0Fk7Dk6dSJJD925o": {
+          "DeleteCoffeeLambdaVersionpdUJyFihQGxoUb9vIeBLbnTa4E5YaDTMwCrD140x8": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "DeleteCoffeeLambdaFunction"
               },
-              "CodeSha256": "0C/xqZLi8QzV3whWULpjb98Zpnf25Qszu5vLBWNnYSQ="
+              "CodeSha256": "aPnYDLuNNV9SgFkNl/nW2MYr72hVmUjTNLj0tHOgNAA="
             }
           },
           "ApiGatewayRestApi": {
@@ -706,7 +706,7 @@
               "DeleteCoffeeLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1753666461856": {
+          "ApiGatewayDeployment1753668616094": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -949,7 +949,7 @@
           "CreateCoffeeLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CreateCoffeeLambdaVersionRZpqFiyBGOmY3zD5viWDs3jblbSAClvZei8t9AFnU"
+              "Ref": "CreateCoffeeLambdaVersionN3uR1RHvlfJO0aEb4LQz2ciQ4SXpK1DGqtRC1U1si0"
             },
             "Export": {
               "Name": "sls-coffee-shop-api-dev-CreateCoffeeLambdaFunctionQualifiedArn"
@@ -958,7 +958,7 @@
           "GetCoffeesLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetCoffeesLambdaVersionrZigvrlntAHPWgXEGNeQ1VQZxZqw6W5P5CVMoJdcY"
+              "Ref": "GetCoffeesLambdaVersion1seUXwkbo58uh0SrvcIAEe7UOJAmvQlrlC7GECDj4I"
             },
             "Export": {
               "Name": "sls-coffee-shop-api-dev-GetCoffeesLambdaFunctionQualifiedArn"
@@ -967,7 +967,7 @@
           "GetCoffeeLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetCoffeeLambdaVersion6E42NPVrrWyV9NO8dIkAFz78VuSuWl7ubqQSywK84"
+              "Ref": "GetCoffeeLambdaVersion743FxF5RWJ3Trsi5cRu0EnKtqvOQrUus6GHLBOG95Q"
             },
             "Export": {
               "Name": "sls-coffee-shop-api-dev-GetCoffeeLambdaFunctionQualifiedArn"
@@ -976,7 +976,7 @@
           "UpdateCoffeeLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "UpdateCoffeeLambdaVersionG26614rZy7l4Pk3e7auCaGMcjozNGAWI7Yev3qJFg30"
+              "Ref": "UpdateCoffeeLambdaVersionukpE2lGPT3mkYtGxllSifwIy05ESyTJ8EXukbUnFHCw"
             },
             "Export": {
               "Name": "sls-coffee-shop-api-dev-UpdateCoffeeLambdaFunctionQualifiedArn"
@@ -985,7 +985,7 @@
           "DeleteCoffeeLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "DeleteCoffeeLambdaVersionE22Z6cYyCkXUcBfBrJPlmMweYP0Fk7Dk6dSJJD925o"
+              "Ref": "DeleteCoffeeLambdaVersionpdUJyFihQGxoUb9vIeBLbnTa4E5YaDTMwCrD140x8"
             },
             "Export": {
               "Name": "sls-coffee-shop-api-dev-DeleteCoffeeLambdaFunctionQualifiedArn"
@@ -1065,7 +1065,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "CreateCoffeeLambdaVersionRZpqFiyBGOmY3zD5viWDs3jblbSAClvZei8t9AFnU"
+        "versionLogicalId": "CreateCoffeeLambdaVersionN3uR1RHvlfJO0aEb4LQz2ciQ4SXpK1DGqtRC1U1si0"
       },
       "getCoffees": {
         "handler": "src/handlers/getCoffees.handler",
@@ -1101,7 +1101,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "GetCoffeesLambdaVersionrZigvrlntAHPWgXEGNeQ1VQZxZqw6W5P5CVMoJdcY"
+        "versionLogicalId": "GetCoffeesLambdaVersion1seUXwkbo58uh0SrvcIAEe7UOJAmvQlrlC7GECDj4I"
       },
       "getCoffee": {
         "handler": "src/handlers/getCoffee.handler",
@@ -1137,7 +1137,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "GetCoffeeLambdaVersion6E42NPVrrWyV9NO8dIkAFz78VuSuWl7ubqQSywK84"
+        "versionLogicalId": "GetCoffeeLambdaVersion743FxF5RWJ3Trsi5cRu0EnKtqvOQrUus6GHLBOG95Q"
       },
       "updateCoffee": {
         "handler": "src/handlers/updateCoffee.handler",
@@ -1173,7 +1173,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "UpdateCoffeeLambdaVersionG26614rZy7l4Pk3e7auCaGMcjozNGAWI7Yev3qJFg30"
+        "versionLogicalId": "UpdateCoffeeLambdaVersionukpE2lGPT3mkYtGxllSifwIy05ESyTJ8EXukbUnFHCw"
       },
       "deleteCoffee": {
         "handler": "src/handlers/deleteCoffee.handler",
@@ -1209,7 +1209,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "DeleteCoffeeLambdaVersionE22Z6cYyCkXUcBfBrJPlmMweYP0Fk7Dk6dSJJD925o"
+        "versionLogicalId": "DeleteCoffeeLambdaVersionpdUJyFihQGxoUb9vIeBLbnTa4E5YaDTMwCrD140x8"
       }
     },
     "resources": {
@@ -1249,8 +1249,9 @@
     "configValidationMode": "warn",
     "serviceFilename": "serverless",
     "initialServerlessConfig": {
+      "org": "lionking",
+      "app": "coffee-shop-api",
       "service": "coffee-shop-api",
-      "frameworkVersion": "4",
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
       },
@@ -1278,7 +1279,9 @@
         }
       }
     },
+    "app": "coffee-shop-api",
     "appId": null,
+    "org": "lionking",
     "orgId": null,
     "build": {
       "$ref": "$[\"service\"][\"initialServerlessConfig\"][\"build\"]"
@@ -1286,7 +1289,7 @@
     "layers": {}
   },
   "package": {
-    "artifactDirectoryName": "serverless/coffee-shop-api/dev/1753666486830-2025-07-28T01:34:46.830Z",
+    "artifactDirectoryName": "serverless/coffee-shop-api/dev/1753668633483-2025-07-28T02:10:33.483Z",
     "artifact": "coffee-shop-api.zip"
   }
 }
