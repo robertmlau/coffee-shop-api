@@ -14,7 +14,7 @@ describe('updateCoffee handler', () => {
     jest.clearAllMocks();
     
     mockEvent = {
-      pathParameters: { id: 'test-coffee-id' },
+      pathParameters: { id: '550e8400-e29b-41d4-a716-446655440000' },
       body: JSON.stringify({
         name: 'Updated Espresso',
         price: 4.00,
@@ -27,7 +27,7 @@ describe('updateCoffee handler', () => {
 
   it('should update a coffee successfully', async () => {
     const updatedCoffee = {
-      id: 'test-coffee-id',
+      id: '550e8400-e29b-41d4-a716-446655440000',
       name: 'Updated Espresso',
       description: 'Strong coffee',
       price: 4.00,
@@ -52,7 +52,7 @@ describe('updateCoffee handler', () => {
       data: updatedCoffee,
     });
     expect(mockDynamoService.prototype.updateCoffee).toHaveBeenCalledWith(
-      'test-coffee-id',
+      '550e8400-e29b-41d4-a716-446655440000',
       {
         name: 'Updated Espresso',
         price: 4.00,
@@ -148,7 +148,7 @@ describe('updateCoffee handler', () => {
     });
 
     const updatedCoffee = {
-      id: 'test-coffee-id',
+      id: '550e8400-e29b-41d4-a716-446655440000',
       name: 'Original Espresso',
       description: 'Strong coffee',
       price: 3.75,
@@ -169,7 +169,7 @@ describe('updateCoffee handler', () => {
 
     expect(result.statusCode).toBe(200);
     expect(mockDynamoService.prototype.updateCoffee).toHaveBeenCalledWith(
-      'test-coffee-id',
+      '550e8400-e29b-41d4-a716-446655440000',
       { price: 3.75 }
     );
   });

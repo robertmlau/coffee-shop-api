@@ -12,7 +12,7 @@ describe('createCoffee handler', () => {
 
   it('should create a coffee successfully', async () => {
     const mockCoffee = {
-      id: 'test-id',
+      id: '550e8400-e29b-41d4-a716-446655440000',
       name: 'Espresso',
       description: 'Strong coffee',
       price: 3.50,

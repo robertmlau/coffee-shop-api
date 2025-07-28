@@ -14,7 +14,7 @@ describe('deleteCoffee handler', () => {
     jest.clearAllMocks();
     
     mockEvent = {
-      pathParameters: { id: 'test-coffee-id' },
+      pathParameters: { id: '550e8400-e29b-41d4-a716-446655440000' },
     };
     
     mockContext = {};
@@ -22,7 +22,7 @@ describe('deleteCoffee handler', () => {
 
   it('should delete a coffee successfully', async () => {
     const existingCoffee = {
-      id: 'test-coffee-id',
+      id: '550e8400-e29b-41d4-a716-446655440000',
       name: 'Espresso',
       description: 'Strong coffee',
       price: 3.50,
@@ -47,8 +47,8 @@ describe('deleteCoffee handler', () => {
       success: true,
       data: { message: 'Coffee deleted successfully' },
     });
-    expect(mockDynamoService.prototype.getCoffee).toHaveBeenCalledWith('test-coffee-id');
-    expect(mockDynamoService.prototype.deleteCoffee).toHaveBeenCalledWith('test-coffee-id');
+    expect(mockDynamoService.prototype.getCoffee).toHaveBeenCalledWith('550e8400-e29b-41d4-a716-446655440000');
+    expect(mockDynamoService.prototype.deleteCoffee).toHaveBeenCalledWith('550e8400-e29b-41d4-a716-446655440000');
   });
 
   it('should return 404 when coffee is not found', async () => {
@@ -120,7 +120,7 @@ describe('deleteCoffee handler', () => {
 
   it('should handle error when deleting coffee', async () => {
     const existingCoffee = {
-      id: 'test-coffee-id',
+      id: '550e8400-e29b-41d4-a716-446655440000', 
       name: 'Espresso',
       description: 'Strong coffee',
       price: 3.50,

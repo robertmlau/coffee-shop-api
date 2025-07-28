@@ -20,7 +20,7 @@ describe('getCoffees handler', () => {
   it('should get all coffees successfully', async () => {
     const coffees = [
       {
-        id: 'coffee-1',
+        id: '550e8400-e29b-41d4-a716-446655440000',
         name: 'Espresso',
         description: 'Strong coffee',
         price: 3.50,
@@ -31,7 +31,7 @@ describe('getCoffees handler', () => {
         updatedAt: '2025-08-01T00:00:00.000Z',
       },
       {
-        id: 'coffee-2',
+        id: '550e8400-e29b-41d4-a716-446655440001',
         name: 'Latte',
         description: 'Espresso with steamed milk',
         price: 4.50,
